@@ -1,12 +1,13 @@
 import { FieldError, FieldValues, useForm } from 'react-hook-form';
 import { useCreateProjectMutation } from '../../api/endpoints/project.endpoint';
-import { useAuthUserQuery } from '../../api/endpoints/auth.endpoint';
 import type { CreateProject } from '../../api/apiTypes';
 import InputWithValidation from '../util/InputWithValidation';
 import WithLabel from '../util/WithLabel';
 import Model from '../util/Model';
 import Item from '../util/Item';
 import toast from 'react-hot-toast';
+import { useAppSelector } from '../../store/hooks';
+import { selectAuthUser } from '../../api/endpoints/auth.endpoint';
 
 interface Props {
   onClose: () => void;
@@ -14,7 +15,7 @@ interface Props {
 
 const CreateProjectModel = (props: Props) => {
   const { onClose } = props;
-  const { data: authUser } = useAuthUserQuery();
+  const authUser = useAppSelector(selectAuthUser)
   const [createProject] = useCreateProjectMutation();
   const {
     register,
@@ -67,8 +68,8 @@ const CreateProjectModel = (props: Props) => {
             <>
               <div className='mb-2 rounded-sm border-[1px] border-gray-300 bg-slate-100 py-1 px-3 text-sm text-c-text'>
                 <Item
-                  text={authUser.username}
-                  icon={authUser.profileUrl}
+                  text={authUser.email}
+                  icon={undefined}
                   size='h-6 w-6'
                   variant='ROUND'
                 />

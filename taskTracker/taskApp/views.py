@@ -79,16 +79,6 @@ class UserViewSet(viewsets.ViewSet):
             print(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @action(detail=False, methods=['GET'])
-    def get_authenticated_user(self, request):
-        try:
-            user = request.user
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
-        except Exception as e:
-            print(e)
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-
     @action(detail=False, methods=['PUT'])
     def update_authenticated_user(self, request):
         try:

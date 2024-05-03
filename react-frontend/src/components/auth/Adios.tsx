@@ -2,11 +2,12 @@ import { FieldError, FieldValues, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { AxiosError } from 'axios';
 import InputWithValidation from '../util/InputWithValidation';
-import { useAuthUserQuery } from '../../api/endpoints/auth.endpoint';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { APIERROR } from '../../api/apiTypes';
 import axiosDf from '../../api/axios';
 import toast from 'react-hot-toast';
+import { useAppSelector } from '../../store/hooks';
+import { selectAuthUser } from '../../api/endpoints/auth.endpoint';
 
 function Adios() {
   const {
@@ -14,15 +15,13 @@ function Adios() {
     formState: { errors, isSubmitting: loading },
     handleSubmit,
   } = useForm();
-  const { data: authUser, error } = useAuthUserQuery();
+  const authUser = useAppSelector(selectAuthUser);
   const [submitError, setSubmitError] = useState('');
   const navigate = useNavigate();
 
-  if (error && (error as APIERROR).status === 401) return <Navigate to='/login' />;
+  if (!authUser) return <Navigate to='/login' />;
 
-  if (!authUser) return null;
-
-  const name = authUser.username;
+  const name = authUser.email;
 
   const onSubmit = async (form: FieldValues) => {
     setSubmitError('');

@@ -41,7 +41,7 @@ export default InputWithValidation;
 
 type Props = {
   register: UseFormRegisterReturn;
-  error: FieldError;
+  error?: FieldError;
   placeholder?: string;
   label: string;
   defaultValue?: string;

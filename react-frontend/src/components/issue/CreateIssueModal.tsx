@@ -10,23 +10,24 @@ import Model from '../util/Model';
 import type { IssueModalProps } from './IssueModelHOC';
 import TextInput from './TextInput';
 import toast from 'react-hot-toast';
+import { useAppSelector } from '../../store/hooks';
 
 const CreateIssueModel = (props: IssueModalProps) => {
   const { lists, members, types, priorities, onClose } = props;
-  const { authUser: u } = selectAuthUser();
+  const authUser = useAppSelector(selectAuthUser);
   const [createIssue, { error, isLoading }] = useCreateIssueMutation();
   const [form, dispatch] = useReducer(reducer, initial);
   const [err, setErr] = useState('');
   const projectId = Number(useParams().projectId);
 
-  if (!u) return null;
+  if (!authUser) return null;
 
   if (error && (error as APIERROR).status === 401) return <Navigate to='/login' />;
 
   const handleCreateIssue = async () => {
     if (!form.summary) return setErr('summary must not be empty');
-    if (!u || form.summary.length > 100 || form.descr.length > 500) return;
-    await createIssue({ ...form, reporterId: u.id, projectId }); //for now
+    if (!authUser || form.summary.length > 100 || form.descr.length > 500) return;
+    await createIssue({ ...form, reporterId: authUser.id, projectId }); //for now
     toast('Created an issue!');
     onClose();
   };
@@ -65,7 +66,7 @@ const CreateIssueModel = (props: IssueModalProps) => {
             <WithLabel label='Reporter'>
               <div className='rounded-sm bg-[#f4f5f7] px-3 py-[5px]'>
                 <Item
-                  {...members.filter(({ value: v }) => v === u.id)[0]}
+                  {...members.filter(({ value: v }) => v === authUser.id)[0]}
                   size='h-6 w-6'
                   variant='ROUND'
                 />

@@ -1,6 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import axiosDf from '../../api/axios';
 import SS from '../util/SpinningCircle';
 import Form from './Form';
 import { useLoginMutation, useRegisterMutation } from '../../api/endpoints/auth.endpoint';
@@ -16,6 +15,26 @@ const Welcome = (props: Props) => {
     formState: { errors, isSubmitting: loading, isSubmitSuccessful: success },
     handleSubmit,
   } = useForm();
+
+  const [logInUser] = useLoginMutation();
+  const [registerNewUser] = useRegisterMutation();
+
+  const logIn = async (body: FieldValues) => {
+    try {
+      await logInUser({email: body.email, pwd: body.pwd});
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  const registerUser = async (body: FieldValues) => {
+    try {
+      await registerNewUser({email: body.email, pwd: body.pwd});
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   const isLoading = loading && !success;
 
   return (
@@ -56,15 +75,3 @@ const Welcome = (props: Props) => {
 };
 
 export default Welcome;
-
-const logIn = async (body: FieldValues) => {
-  const result =  useLoginMutation(body);
-  console.log('login',result);
-  return result;
-};
-
-const registerUser = async (body: FieldValues) => {
-  const result =  useRegisterMutation(body);
-  console.log('register',result);
-  return result;
-};

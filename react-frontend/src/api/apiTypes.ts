@@ -1,19 +1,15 @@
 export interface AuthUser {
   id: number;
-  username: string;
   email: string;
-  profileUrl: string;
-  lastLoggedIn: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export interface jwtAuthUser extends AuthUser {
-  refreshToken: string;
-  accessToken: string;
+export interface jwtAuthUser {
+  refresh?: string | null;
+  access?: string | null;
+  user?: AuthUser;
 }
 
-export type updateAuthUser = Partial<Pick<AuthUser, 'username' | 'email' | 'profileUrl'>>;
+export type updateAuthUser = Partial<Pick<AuthUser,  'email'>>;
 
 export interface List {
   id: number;
@@ -209,11 +205,10 @@ export interface DeleteComment {
 
 export interface LoginCredentials {
   email: string;
-  password: string;
+  pwd: string;
 }
 
 export interface RegisterCredentials {
-  username: string;
   email: string;
-  password: string;
+  pwd: string;
 }

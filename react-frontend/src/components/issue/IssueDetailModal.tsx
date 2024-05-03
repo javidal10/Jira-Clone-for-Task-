@@ -24,7 +24,7 @@ const IssueDetailModal = (props: IssueModalProps) => {
   const issue = Issue as IssueMetaData;
   const { userId } = useAppSelector((s) => s.query.issue);
   const { issues } = selectIssuesArray({ listId: issue.listId, projectId, userId });
-  const { authUser: u } = selectAuthUser();
+  const authUser  = useAppSelector(selectAuthUser);
   const {
     id,
     type,
@@ -41,7 +41,7 @@ const IssueDetailModal = (props: IssueModalProps) => {
   const [updateIssue] = useUpdateIssueMutation();
   const [deleteIssue] = useDeleteIssueMutation();
   const [isOpen, setIsOpen] = useState(false);
-  const isMine = reporterId === u?.id;
+  const isMine = reporterId === authUser?.id;
   const reporter = members.filter(({ value }) => value === reporterId)[0];
 
   const dispatchMiddleware = async (data: DispatchMiddleware) => {

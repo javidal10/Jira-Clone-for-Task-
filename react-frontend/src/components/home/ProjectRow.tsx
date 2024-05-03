@@ -12,7 +12,7 @@ interface Props extends Project {
 }
 
 const ProjectRow = (props: Props) => {
-  const { idx, id, name, descr, repo, userId, authUserId } = props;
+  const { idx, id, name, descr, userId, authUserId } = props;
   const { members } = selectMembers(id);
   const { data: publicUser } = usePublicUserQuery(userId);
   const [on, setOn] = useState(false);

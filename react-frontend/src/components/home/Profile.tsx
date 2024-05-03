@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import type { AuthUser } from '../../api/apiTypes';
 import UpdateProfile from './UpdateProfile';
 import Avatar from '../util/Avatar';
-import { parseDate } from '../../utils';
 const ChangePwd = lazy(() => import('./ChangePwd'));
 
 interface Props {
@@ -19,8 +18,8 @@ const Profile = (props: Props) => {
       {u ? (
         <>
           <Avatar
-            src={u.profileUrl}
-            name={u.username}
+            src={'https://gravatar.com/avatar/b0d4e76057989c6f790446653db8b11f?s=400&d=robohash&r=x'}
+            name={u.email}
             className='h-40 w-40 cursor-default text-6xl'
           />
           <div className='mb-2'>
@@ -39,8 +38,8 @@ const Profile = (props: Props) => {
             </button>
           </div>
           <div className='mt-auto w-full text-sm text-c-5'>
-            <span className='mb-1 block'>{'joined at ' + parseDate(u.createdAt)}</span>
-            <span>{'last logged in ' + parseDate(u.lastLoggedIn)}</span>
+            <span className='mb-1 block'>{'joined at '}</span>
+            <span>{'last logged in '}</span>
             <Link to='/adios' className='btn-alert mt-3 block w-full text-center text-base'>
               Delete account
             </Link>

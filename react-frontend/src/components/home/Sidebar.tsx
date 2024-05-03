@@ -1,13 +1,14 @@
 import { lazy, Suspense as S, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAuthUserQuery } from '../../api/endpoints/auth.endpoint';
 import IconBtn from '../util/IconBtn';
 import Avatar from '../util/Avatar';
 import { setTheme, Theme } from '../../utils';
 import { APIERROR } from '../../api/apiTypes';
 import axiosDf from '../../api/axios';
 import toast from 'react-hot-toast';
+import { useAppSelector } from '../../store/hooks';
+import { selectAuthUser } from '../../api/endpoints/auth.endpoint';
 const Profile = lazy(() => import('./Profile'));
 
 interface Props {
@@ -20,11 +21,11 @@ function Sidebar(props: Props) {
     theme: { mode },
     toggleTheme,
   } = props;
-  const { data: u, error } = useAuthUserQuery();
+  const authUser = useAppSelector(selectAuthUser);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  if (error && (error as APIERROR).status === 401) return <Navigate to='/login' />;
+  if (!authUser) return <Navigate to='/login' />;
 
   const handleToggle = () => {
     toggleTheme();
@@ -52,12 +53,12 @@ function Sidebar(props: Props) {
           />
         </div>
         <div className='flex flex-col gap-6'>
-          {u && (
+          {authUser && (
             <>
               <Avatar
                 title='Profile'
-                src={u.profileUrl}
-                name={u.username}
+                src={'https://gravatar.com/avatar/b0d4e76057989c6f790446653db8b11f?s=400&d=robohash&r=x'}
+                name={authUser.email}
                 onClick={() => setIsOpen((p) => !p)}
                 className='h-9 w-9 border-[1px] hover:border-green-500'
               />
@@ -71,9 +72,9 @@ function Sidebar(props: Props) {
         animate={{ width: isOpen ? 320 : 0 }}
         transition={{ type: 'tween' }}
       >
-        {u && (
+        {authUser && (
           <S>
-            <Profile authUser={u} />
+            <Profile authUser={authUser} />
           </S>
         )}
       </motion.div>

@@ -9,12 +9,13 @@ import { useParams } from 'react-router-dom';
 import { selectMembers } from '../../api/endpoints/member.endpoint';
 import { selectAuthUser } from '../../api/endpoints/auth.endpoint';
 import toast from 'react-hot-toast';
+import { useAppSelector } from '../../store/hooks';
 
 const Setting = () => {
   const [updateProject, { isLoading }] = useUpdateProjectMutation();
   const projectId = Number(useParams().projectId);
   const { members } = selectMembers(projectId);
-  const { authUser: u } = selectAuthUser();
+  const authUser = useAppSelector(selectAuthUser);
   const { project } = selectCurrentProject(projectId);
   const {
     register,
@@ -22,10 +23,10 @@ const Setting = () => {
     formState: { errors },
   } = useForm();
 
-  if (!project || !members || !u) return null;
+  if (!project || !members || !authUser) return null;
 
   const { id, name, descr, repo } = project;
-  const isAdmin = members.filter(({ userId: uid }) => uid === u.id)[0].isAdmin;
+  const isAdmin = members.filter(({ userId: uid }) => uid === authUser.id)[0].isAdmin;
 
   const onSubmit = async (formData: FieldValues) => {
     if (formData.name === name && formData.descr === descr && formData.repo === repo) return;

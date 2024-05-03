@@ -15,7 +15,7 @@ function UpdateProfile({ user: u }: { user: AuthUser }) {
   const handleUpdate = async (form: FieldValues) => {
     if (
       !u ||
-      (form.username === u.username && form.email === u.email && form.profileUrl === u.profileUrl)
+      (form.email === u.email)
     )
       return;
     await updateAuthUser(form);
@@ -24,16 +24,6 @@ function UpdateProfile({ user: u }: { user: AuthUser }) {
   return (
     <>
       <div className='flex w-[16.5rem] flex-col gap-4'>
-        <InputWithValidation
-          label='Username'
-          placeholder='username'
-          defaultValue={u.username}
-          register={register('username', {
-            required: { value: true, message: 'username must not be empty' },
-          })}
-          error={errors.username as FieldError}
-          darkEnabled
-        />
         <InputWithValidation
           label='Email'
           placeholder='email'
@@ -48,9 +38,8 @@ function UpdateProfile({ user: u }: { user: AuthUser }) {
         <InputWithValidation
           label='Photo Url'
           placeholder='profile picture'
-          defaultValue={u.profileUrl}
+          defaultValue={'https://gravatar.com/avatar/b0d4e76057989c6f790446653db8b11f?s=400&d=robohash&r=x'}
           register={register('profileUrl')}
-          error={errors.profileUrl as FieldError}
           darkEnabled
         />
       </div>

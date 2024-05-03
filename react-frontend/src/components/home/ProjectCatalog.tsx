@@ -7,9 +7,10 @@ import { useProjectsQuery } from '../../api/endpoints/project.endpoint';
 import SS from '../util/SpinningCircle';
 import CreateProjectModel from './CreateProjectModel';
 import ProjectRow from './ProjectRow';
+import { useAppSelector } from '../../store/hooks';
 
 const ProjectCatalog = () => {
-  const { authUser } = selectAuthUser();
+  const authUser = useAppSelector(selectAuthUser);
   const {
     data: projects,
     error,

@@ -29,7 +29,10 @@ function AddComment(props: Props) {
   return (
     <div>
       <div className='relative mt-3 flex items-start gap-3'>
-        <Avatar src={u.profileUrl} name={u.username} />
+        <Avatar 
+        src={'https://gravatar.com/avatar/b0d4e76057989c6f790446653db8b11f?s=400&d=robohash&r=x'} 
+        name={u.email} 
+        />
         <RTAutosize
           className='w-full resize-none rounded-[3px] border-[1.5px] border-slate-200 px-3 py-1 text-gray-800 outline-none hover:bg-[#f4f5f7] focus:border-chakra-blue'
           placeholder='Add a comment ...'

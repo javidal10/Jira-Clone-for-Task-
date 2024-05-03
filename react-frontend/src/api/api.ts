@@ -12,4 +12,6 @@ export const api = createApi({
 	endpoints: ({}) => ({}),
 })
 
-export const {} = api
+export const {
+	endpoints,
+} = api

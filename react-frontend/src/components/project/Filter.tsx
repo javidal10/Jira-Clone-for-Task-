@@ -3,12 +3,12 @@ import { APIERROR } from '../../api/apiTypes';
 import { Navigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useMembersQuery } from '../../api/endpoints/member.endpoint';
-import { useAuthUserQuery } from '../../api/endpoints/auth.endpoint';
 import { useProjectQuery } from '../../api/endpoints/project.endpoint';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { setIssueQuery } from '../../store/slices/querySlice';
 import Avatar from '../util/Avatar';
 import toast from 'react-hot-toast';
+import { selectAuthUser } from '../../api/endpoints/auth.endpoint';
 const IssueModelHOC = lazy(() => import('../issue/IssueModelHOC'));
 const CreateIssueModal = lazy(() => import('../issue/CreateIssueModal'));
 
@@ -22,7 +22,7 @@ function Filter(props: Props) {
   const { projectId, isEmpty, setIsDragDisabled } = props;
   const { data: m, error } = useMembersQuery(projectId);
   const { data: pj } = useProjectQuery(projectId);
-  const { data: u } = useAuthUserQuery();
+  const authUser = useAppSelector(selectAuthUser)
   const { userId: uid } = useAppSelector((s) => s.query.issue);
   const [on, setOn] = useState(false);
   const dispatch = useAppDispatch();
@@ -78,8 +78,9 @@ function Filter(props: Props) {
           )}
         </div>
       )}
-      {u && (
-        <button className='btn-crystal shrink-0' onClick={handleSetQuery({ userId: u.id })}>
+      {authUser && (
+        <button className='btn-crystal shrink-0' 
+        onClick={handleSetQuery({ userId: authUser.id })}>
           Only my issues
         </button>
       )}

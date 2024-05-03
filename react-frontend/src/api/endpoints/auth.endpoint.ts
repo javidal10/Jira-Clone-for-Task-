@@ -1,12 +1,10 @@
+import { useAppSelector } from '../../store/hooks';
+import { RootState } from '../../store/store';
 import { api } from '../api';
 import { AuthUser, LoginCredentials, PublicUser, RegisterCredentials, jwtAuthUser, updateAuthUser } from '../apiTypes';
 
 export const extendedApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    authUser: builder.query<AuthUser, void>({
-      query: () => ({ url: `user/get_authenticated_user/` }),
-      providesTags: ['AuthUser'],
-    }),
     publicUser: builder.query<PublicUser, number>({
       query: (id) => ({ url: `user/${id}` }),
     }),
@@ -19,7 +17,8 @@ export const extendedApi = api.injectEndpoints({
       invalidatesTags: ['AuthUser'],
     }),
     login: builder.mutation<jwtAuthUser, LoginCredentials>({
-      query: (body) => ({
+      query: (body) => (
+        {
         url: 'user/login/',
         method: 'POST',
         body: body,
@@ -36,16 +35,13 @@ export const extendedApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { 
-  useAuthUserQuery, 
+export const {
+  endpoints,
   useUpdateAuthUserMutation, 
   usePublicUserQuery, 
   useLoginMutation, 
   useRegisterMutation } = extendedApi;
 
 // selectors
-export const selectAuthUser = () =>
-  extendedApi.useAuthUserQuery(undefined, {
-    selectFromResult: ({ data }) => 
-      ({ authUser: data }),
-  });
+export const selectAuthUser = () => useAppSelector((state: RootState) => state.auth.user);
+

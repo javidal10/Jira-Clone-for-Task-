@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { useState } from 'react';
 import {
   FieldError,
@@ -8,7 +7,6 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { APIERROR } from '../../api/apiTypes';
 import InputWithValidation from '../util/InputWithValidation';
 
 interface Props {
@@ -23,6 +21,7 @@ interface Props {
 }
 
 function Form(props: Props) {
+  
   const { register, onSubmit, handleSubmit, errors, loading, type } = props;
   const [error, setError] = useState('');
 
@@ -30,9 +29,9 @@ function Form(props: Props) {
     try {
       await onSubmit(form);
       toast(type === 'LOGIN' ? 'You have logged in!' : 'Your account is created!');
-      window.location.replace('http://localhost:5173/project'); //with refresh
     } catch (error) {
-      setError(((error as AxiosError).response?.data as APIERROR).message);
+      console.log('error',error);
+      setError('An error occurred')
     }
   });
 
